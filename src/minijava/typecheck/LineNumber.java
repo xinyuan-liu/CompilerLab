@@ -3,9 +3,9 @@ package minijava.typecheck;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
 
-import syntaxtree.NodeChoice;
-import syntaxtree.NodeOptional;
-import syntaxtree.NodeToken;
+import minijava.syntaxtree.NodeChoice;
+import minijava.syntaxtree.NodeOptional;
+import minijava.syntaxtree.NodeToken;
 //获得节点的行列号
 public class LineNumber {
 	public int line;

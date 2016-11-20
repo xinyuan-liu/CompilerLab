@@ -7,7 +7,7 @@ import java.io.StringReader;
 import minijava.MiniJavaParser;
 import minijava.ParseException;
 import minijava.item;
-import syntaxtree.Node;
+import minijava.syntaxtree.Node;
 
 public class Main extends minijava.typecheck.Main{
 	static String source;

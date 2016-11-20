@@ -3,13 +3,13 @@ package minijava.minijava2piglet;
 import java.util.List;
 
 import minijava.item;
+import minijava.syntaxtree.*;
 import minijava.typecheck.ExprType;
 import minijava.typecheck.Main;
 import minijava.typecheck.classitem;
 import minijava.typecheck.mthditem;
 import minijava.typecheck.varitem;
-import visitor.GJVoidDepthFirst;
-import syntaxtree.*;
+import minijava.visitor.GJVoidDepthFirst;
 
 public class Translator extends GJVoidDepthFirst<item>{
 	public static String piglet="";

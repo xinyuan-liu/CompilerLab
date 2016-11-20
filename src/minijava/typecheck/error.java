@@ -1,6 +1,6 @@
 package minijava.typecheck;
 
-import syntaxtree.Node;
+import minijava.syntaxtree.Node;
 
 public 
 class error {

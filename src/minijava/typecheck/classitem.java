@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import minijava.item;
-import syntaxtree.ClassDeclaration;
-import syntaxtree.ClassExtendsDeclaration;
-import syntaxtree.Identifier;
-import syntaxtree.MainClass;
-import syntaxtree.MethodDeclaration;
-import syntaxtree.Node;
-import syntaxtree.VarDeclaration;
+import minijava.syntaxtree.ClassDeclaration;
+import minijava.syntaxtree.ClassExtendsDeclaration;
+import minijava.syntaxtree.Identifier;
+import minijava.syntaxtree.MainClass;
+import minijava.syntaxtree.MethodDeclaration;
+import minijava.syntaxtree.Node;
+import minijava.syntaxtree.VarDeclaration;
 //存储类的符号表类
 public class classitem extends item {
 	

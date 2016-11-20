@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import minijava.item;
-import syntaxtree.FormalParameter;
-import syntaxtree.Identifier;
-import syntaxtree.MainClass;
-import syntaxtree.MethodDeclaration;
-import syntaxtree.VarDeclaration;
+import minijava.syntaxtree.FormalParameter;
+import minijava.syntaxtree.Identifier;
+import minijava.syntaxtree.MainClass;
+import minijava.syntaxtree.MethodDeclaration;
+import minijava.syntaxtree.VarDeclaration;
 
 public class mthditem extends item {
 	public MethodDeclaration node;

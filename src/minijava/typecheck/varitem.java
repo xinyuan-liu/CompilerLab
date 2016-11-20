@@ -1,9 +1,9 @@
 package minijava.typecheck;
 
 import minijava.item;
-import syntaxtree.Identifier;
-import syntaxtree.Type;
-import syntaxtree.VarDeclaration;
+import minijava.syntaxtree.Identifier;
+import minijava.syntaxtree.Type;
+import minijava.syntaxtree.VarDeclaration;
 //存储变量表项的符号表类
 public class varitem extends item {
 	public item scope;

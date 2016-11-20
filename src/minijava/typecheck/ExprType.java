@@ -1,8 +1,8 @@
 package minijava.typecheck;
 
 import minijava.item;
-import syntaxtree.*;
-import visitor.GJDepthFirst;
+import minijava.syntaxtree.*;
+import minijava.visitor.GJDepthFirst;
 
 public class ExprType extends GJDepthFirst<String, item>{
 	

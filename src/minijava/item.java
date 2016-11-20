@@ -1,8 +1,8 @@
 package minijava;
 
+import minijava.syntaxtree.Identifier;
 import minijava.typecheck.mthditem;
 import minijava.typecheck.varitem;
-import syntaxtree.Identifier;
 //符号表基类
 public class item {
 	public varitem findVar(Identifier id){
