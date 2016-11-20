@@ -17,7 +17,11 @@ public class Temp implements Node {
       f0 = n0;
       f1 = n1;
    }
-
+   
+   public String toString(){
+	   return f0.toString()+" "+f1.toString();
+   }
+   
    public Temp(IntegerLiteral n0) {
       f0 = new NodeToken("TEMP");
       f1 = n0;

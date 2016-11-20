@@ -1,1 +1,1 @@
-java -cp bin/ minijava.minijava2piglet.Main
+java -cp bin/ piglet.piglet2spiglet.Main
