@@ -12,6 +12,19 @@ public class Translator extends GJDepthFirst<String,Boolean> {
 	public static String source;
 	public static String output="";
 	public int freetmp=0;
+	public boolean Flag;
+	
+	public void setFlag()
+	{
+		Flag=true;
+	}
+	
+	public boolean getFlag()
+	{
+		boolean tmp=Flag;
+		Flag=false;
+		return tmp;
+	}
 	
 	public int cnttmp(Node n)
 	{
@@ -99,7 +112,9 @@ public class Translator extends GJDepthFirst<String,Boolean> {
 	public String ExpConv(Exp n)
 	{
 		String TargetExp="";
+		setFlag();
 		TargetExp=n.accept(this,true);
+		getFlag();
 		return TargetExp;
 	}
 	
@@ -121,11 +136,14 @@ public class Translator extends GJDepthFirst<String,Boolean> {
 	}
 	
 	public String visit(StmtExp n, Boolean SimpleExp) {
+		boolean flag=getFlag();
 		n.f1.accept(this,true);
+		if(flag)setFlag();
 		return n.f3.accept(this,true);
 	}
 	
 	public String visit(Call n, Boolean SimpleExp) {
+		boolean flag=getFlag();
 		String simpleexp=n.f1.accept(this,true);
 		List<String>params=new ArrayList<String>();
 		for(Node exp:n.f3.nodes)
@@ -133,27 +151,38 @@ public class Translator extends GJDepthFirst<String,Boolean> {
 			params.add(exp.accept(this,false));
 		}
 		String tmp=newtemp();
-		output+="MOVE "+tmp+"\nCALL "+simpleexp+" ( ";
+		String Exp="CALL "+simpleexp+" ( ";
 		for(String temp:params)
 		{
-			output+=temp+" ";
+			Exp+=temp+" ";
 		}
-		output+=" )\n";
+		Exp+=" )";
+		if(flag)
+			return Exp;
+		output+="MOVE "+tmp+"\n"+Exp+"\n";
 		return tmp;
 	}
 	
 	public String visit(HAllocate n, Boolean SimpleExp) {
+		boolean flag=getFlag();
 		String simpleexp=n.f1.accept(this,true);
 		String temp=newtemp();
-		output+="MOVE "+temp+" HALLOCATE "+simpleexp+"\n";
+		String Exp="HALLOCATE "+simpleexp;
+		if(flag)
+			return Exp;
+		output+="MOVE "+temp+" "+Exp+"\n";
 		return temp;
 	}
 	
 	public String visit(BinOp n, Boolean SimpleExp) {
+		boolean flag=getFlag();
 		String temp=n.f1.accept(this,false);
 		String simpleexp=n.f2.accept(this,true);
 		String tmpt=newtemp();
-		output+="MOVE "+tmpt+" "+n.f0.toString()+" "+temp+" "+simpleexp+"\n";
+		String Exp=n.f0.toString()+" "+temp+" "+simpleexp;
+		if(flag)
+			return Exp;
+		output+="MOVE "+tmpt+" "+Exp+"\n";
 		return tmpt;
 	}
 	
