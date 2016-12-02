@@ -12,8 +12,6 @@ import java.util.List;
 
 import minijava.MiniJavaParser;
 import minijava.ParseException;
-
-import minijava.item;
 import minijava.syntaxtree.AllocationExpression;
 import minijava.syntaxtree.AndExpression;
 import minijava.syntaxtree.ArrayAllocationExpression;

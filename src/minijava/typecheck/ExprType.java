@@ -1,6 +1,5 @@
 package minijava.typecheck;
 
-import minijava.item;
 import minijava.syntaxtree.*;
 import minijava.visitor.GJDepthFirst;
 

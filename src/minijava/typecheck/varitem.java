@@ -1,6 +1,5 @@
 package minijava.typecheck;
 
-import minijava.item;
 import minijava.syntaxtree.Identifier;
 import minijava.syntaxtree.Type;
 import minijava.syntaxtree.VarDeclaration;

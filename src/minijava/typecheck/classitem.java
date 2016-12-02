@@ -3,7 +3,6 @@ package minijava.typecheck;
 import java.util.ArrayList;
 import java.util.List;
 
-import minijava.item;
 import minijava.syntaxtree.ClassDeclaration;
 import minijava.syntaxtree.ClassExtendsDeclaration;
 import minijava.syntaxtree.Identifier;

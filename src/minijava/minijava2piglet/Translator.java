@@ -2,11 +2,11 @@ package minijava.minijava2piglet;
 
 import java.util.List;
 
-import minijava.item;
 import minijava.syntaxtree.*;
 import minijava.typecheck.ExprType;
 import minijava.typecheck.Main;
 import minijava.typecheck.classitem;
+import minijava.typecheck.item;
 import minijava.typecheck.mthditem;
 import minijava.typecheck.varitem;
 import minijava.visitor.GJVoidDepthFirst;
