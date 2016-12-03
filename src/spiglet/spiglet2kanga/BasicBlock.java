@@ -17,6 +17,8 @@ public class BasicBlock {
 	public Set<Integer>Def=new HashSet<Integer>();
 	public List<DUChain>DUChains=new ArrayList<DUChain>();
 	
+	public Set<DUChain>In_DUChain=new HashSet<DUChain>();
+	public Set<DUChain>Out_DUChain=new HashSet<DUChain>();
 	
 	public List<VarRef>VarRefList=new ArrayList<VarRef>();
 	
