@@ -17,7 +17,11 @@ public class Operator implements Node {
    public Operator(NodeChoice n0) {
       f0 = n0;
    }
-
+   
+   public String toString() {
+	   return ((NodeToken) f0.choice).toString();
+   }
+   
    public void accept(spiglet.visitor.Visitor v) {
       v.visit(this);
    }

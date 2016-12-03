@@ -15,6 +15,10 @@ public class IntegerLiteral implements Node {
       f0 = n0;
    }
 
+   public String toString() {
+	   return f0.toString();
+   }
+   
    public void accept(spiglet.visitor.Visitor v) {
       v.visit(this);
    }

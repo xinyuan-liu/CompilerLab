@@ -3,8 +3,8 @@ package spiglet.spiglet2kanga;
 import java.util.*;
 
 public class InterferenceGraph {
-	GraphNode [] Node;
-	int num;
+	public GraphNode [] Node;
+	public int num;
 	
 	void addEdge(int a,int b){
 		if(a==b)
@@ -32,6 +32,9 @@ public class InterferenceGraph {
 	public void build(ControlFlowGraph cfg) {
 		num=cfg.DUChainNum;
 		Node=new GraphNode [num];
+		for(int i=0;i<num;i++)
+			Node[i]=new GraphNode(i);
+		
 		for(BasicBlock block:cfg.blocks) {
 			Set<Integer>Active=new HashSet<Integer>();
 			
@@ -55,16 +58,80 @@ public class InterferenceGraph {
 			}
 		}
 	}
+	
+	public void color(int ColorNum) {
+		Stack <GraphNode> s=new Stack <GraphNode>();
+		List <GraphNode> NodeList=new ArrayList <GraphNode>(num);
+		for(int i=0;i<num;i++)
+			NodeList.add(Node[i]);
+		
+		while(!NodeList.isEmpty()) {
+			Collections.sort(NodeList,new Comparator<GraphNode>() {
+				public int compare(GraphNode n1, GraphNode n2) {
+					if(n1.degree>n2.degree)
+						return 1;
+					if(n1.degree==n2.degree)
+						return 0;
+					return -1;
+				}
+			});
+			if(NodeList.get(0).degree>=ColorNum){
+				GraphNode n=NodeList.get(0);//TODO choose spilled node
+				NodeList.remove(0);
+				n.color=-1;
+				for(GraphNode node:n.EdgeTo){
+					node.delEdge(n);
+				}
+			} else {
+				while( (!NodeList.isEmpty()) && NodeList.get(0).degree<ColorNum) {
+					GraphNode n=s.push(NodeList.get(0));
+					NodeList.remove(0);
+					for(GraphNode node:n.EdgeTo){
+						node.delEdge(n);
+					}
+				}
+			}
+		}
+		
+		while(!s.empty()) {
+			GraphNode n=s.pop();
+			int[] colors=new int [ColorNum];
+			
+			for(GraphNode node:n.EdgeTo) {
+				if(node.color==-1) 
+					continue;
+				colors[node.color]=1;
+			}
+			for(int i=0;i<ColorNum;i++)
+				if(colors[i]==0)
+				{
+					n.color=i;
+					break;
+				}
+		}
+		
+		
+	}
 }
 
 class GraphNode {
+	public int num;
 	public int degree=0;
+	public int color=0; //-1 for spill
 	public List <GraphNode> EdgeTo=new LinkedList <GraphNode>();
+	GraphNode(int num_){num=num_;}
 	public boolean addEdge(GraphNode n) {
 		if(EdgeTo.contains(n))
 			return false;
 		EdgeTo.add(n);
 		degree++;
 		return true;
+	}
+	public void delEdge(GraphNode n) {
+		int index=EdgeTo.indexOf(n);
+		if(index!=-1) {
+			EdgeTo.remove(index);
+			degree--;
+		}
 	}
 }

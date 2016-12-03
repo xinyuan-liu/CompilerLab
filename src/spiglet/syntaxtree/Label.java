@@ -14,7 +14,12 @@ public class Label implements Node {
    public Label(NodeToken n0) {
       f0 = n0;
    }
-
+   
+   public String toString()
+   {
+	   return f0.toString();
+   }
+   
    public void accept(spiglet.visitor.Visitor v) {
       v.visit(this);
    }
