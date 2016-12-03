@@ -8,6 +8,8 @@ public class DUChain {
 	public int num;
 	public AtomicInteger SAnum=new AtomicInteger();
 	boolean visited=false;
+	public int preColoring=-1;
+	
 	
 	public void merge(DUChain c) {
 		if(c==null)

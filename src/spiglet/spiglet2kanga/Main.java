@@ -21,13 +21,13 @@ public class Main {
 		
 	}
 	
-	public static void test(Node root) {
+	public static ControlFlowGraph test(Node root) {
 		
 		final ControlFlowGraph cfg=new ControlFlowGraph();
 		root.accept(new DepthFirstVisitor(){
-			public void visit (StmtList n)
+			public void visit (Procedure n)
 			{
-				cfg.build(n);
+				cfg.build(n.f4.f1,Integer.parseInt(n.f2.toString()));
 			}
 		});
 		cfg.SSA();
@@ -35,8 +35,8 @@ public class Main {
 		
 		InterferenceGraph g=new InterferenceGraph();
 		g.build(cfg);
-		g.color(10);
-		
+		g.color(22);
+		return cfg;
 	}
 	
 	public static void printInOut(ControlFlowGraph cfg)
@@ -51,7 +51,24 @@ public class Main {
 		System.out.println();
 		}
 	}
-		
+	
+	public static void printBlocks(ControlFlowGraph cfg)
+	{
+		for(BasicBlock b:cfg.blocks) {
+			for(Node s:b.stmts)
+				System.out.println((Stmt)s);
+		for(BasicBlock block:b.next)
+			System.out.print(block.stmts.size()+" ");
+		System.out.println();
+		for(BasicBlock block:b.prev)
+			System.out.print(block.stmts.size()+" ");
+		System.out.println();
+		for(DUChain c:b.DUChains)
+			System.out.print(c.num+"("+c.SAnum.get()+")"+" ");
+		System.out.println("\n");
+		}
+	}
+	
 	public static void printInOutDUChain(ControlFlowGraph cfg)
 	{
 		for(BasicBlock b:cfg.blocks) {

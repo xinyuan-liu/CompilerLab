@@ -13,6 +13,8 @@ public class Temp implements Node {
    public NodeToken f0;
    public IntegerLiteral f1;
    public VarRef ref;
+   
+   
    public Temp(NodeToken n0, IntegerLiteral n1) {
       f0 = n0;
       f1 = n1;

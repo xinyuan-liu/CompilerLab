@@ -11,6 +11,7 @@ public class BasicBlock {
 	public List<Label>next_buffer=new ArrayList<Label>();
 	public List<Node>stmts=new ArrayList<Node>();
 	
+	
 	public Set<Integer>In=new HashSet<Integer>();
 	public Set<Integer>Out=new HashSet<Integer>();
 	public Set<Integer>Use=new HashSet<Integer>();
@@ -39,8 +40,19 @@ public class BasicBlock {
 				}
 				public void visit(MoveStmt n) {
 					n.f2.accept(this);
-					n.f1.ref=new VarRef(Access.Def,n.f1);
+					if(n.f1.ref==null)
+						n.f1.ref=new VarRef(Access.Def,n.f1);
 					l.add(n.f1.ref);
+				}
+				public void visit(Call n) {
+					super.visit(n);
+					int l=n.f3.size();
+					if(l>ControlFlowGraph.ArgReg.length)
+						l=ControlFlowGraph.ArgReg.length;
+					for(int i=0;i<l;i++)
+						VarRefList.add(new VarRef(Access.Def,10000+i,ControlFlowGraph.ArgReg[i]));
+					VarRefList.add(new CallRef(n));
+					
 				}
 			});
 		}
@@ -116,7 +128,7 @@ public class BasicBlock {
 	}
 }
 enum Access {
-	Def,Use,None;
+	Def,Use,None,Call;
 }
 
 

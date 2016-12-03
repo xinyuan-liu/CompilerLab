@@ -10,13 +10,15 @@ public class ControlFlowGraph {
 	List<DUChain>DUChains=new ArrayList<DUChain>();
 	public int DUChainNum;
 	
+	public static int [] ArgReg={18,19,20,21};//TODO
+	
 	public void SSA() {
 		for(BasicBlock block: blocks) {
 			for(VarRef v:block.VarRefList) {
 				if(v.acc==Access.Def) {
 					block.DUChains.add(new DUChain(v));
 				}
-				else {
+				else if(v.acc==Access.Use) {
 					int l=block.DUChains.size();
 					boolean flag=true;
 					for(int i=l-1;i>=0;i--)
@@ -75,7 +77,6 @@ public class ControlFlowGraph {
 					try {
 						throw new Exception("ERROR");
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				block.Out_DUChain.add(out);
@@ -94,6 +95,16 @@ public class ControlFlowGraph {
 			c.SAnum.set(i);
 			for(VarRef v:c.List) {
 				v.SAnum=i;
+				if(v.preColoring!=-1){
+					if(c.preColoring==-1)
+						c.preColoring=v.preColoring;
+					else if(c.preColoring!=v.preColoring)
+						try {
+							throw new Exception("Dup Pre-coloring");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				}
 			}
 			i++;
 		}
@@ -121,10 +132,12 @@ public class ControlFlowGraph {
 		}
 		
 		if(block.Out_DUChain.contains(c)) {
+			
 			for(BasicBlock s:block.next) {
 				if(s.In.contains(c.num)) {
+					
 					int l1=s.DUChains.size();
-					for(int i=l1-1;i>=0;i--) {
+					for(int i=0;i<l1;i++) {
 						if(s.DUChains.get(i).num==c.num)
 						{
 							s.DUChains.get(i).SAnum=res.SAnum;
@@ -138,9 +151,23 @@ public class ControlFlowGraph {
 		return res;
 	}
 	
-	public void build(StmtList sl) {
+	public List<VarRef>Args=new ArrayList<VarRef>();
+	
+	public void build(StmtList sl,int n) {
 		final BasicBlock b=new BasicBlock();
 		blocks.add(b);
+		for(int i=0;i<n;i++){
+			VarRef v=new VarRef(Access.Def,i);
+			b.VarRefList.add(v);
+			Args.add(v);
+		}
+		
+		if(n>ControlFlowGraph.ArgReg.length)
+			n=ControlFlowGraph.ArgReg.length;
+		for(int i=0;i<n;i++)
+			b.VarRefList.add(new VarRef(Access.Def,i+10000,ArgReg[i]));
+
+	
 		sl.accept(new DepthFirstVisitor(){
 			BasicBlock block=b;
 			public void visit(NodeSequence n) {

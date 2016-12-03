@@ -4,6 +4,11 @@
 
 package spiglet.syntaxtree;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import spiglet.spiglet2kanga.VarRef;
+
 /**
  * Grammar production:
  * f0 -> "CALL"
@@ -19,6 +24,8 @@ public class Call implements Node {
    public NodeListOptional f3;
    public NodeToken f4;
 
+   public Set<Integer>Active=new HashSet<Integer>();
+   
    public Call(NodeToken n0, SimpleExp n1, NodeToken n2, NodeListOptional n3, NodeToken n4) {
       f0 = n0;
       f1 = n1;

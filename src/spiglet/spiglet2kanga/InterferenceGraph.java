@@ -34,6 +34,13 @@ public class InterferenceGraph {
 		Node=new GraphNode [num];
 		for(int i=0;i<num;i++)
 			Node[i]=new GraphNode(i);
+		for(DUChain c:cfg.DUChains) {
+			if(c.preColoring!=-1) {
+				Node[c.SAnum.get()].preColoring=c.preColoring;
+				Node[c.SAnum.get()].color=c.preColoring;
+			}
+		}
+		
 		
 		for(BasicBlock block:cfg.blocks) {
 			Set<Integer>Active=new HashSet<Integer>();
@@ -55,6 +62,9 @@ public class InterferenceGraph {
 					Active.remove(v.SAnum);
 					addEdge(v.SAnum,Active);
 				}
+				else if(v.acc==Access.Call) {
+					((CallRef)v).call.Active.addAll(Active);
+				}
 			}
 		}
 	}
@@ -63,7 +73,8 @@ public class InterferenceGraph {
 		Stack <GraphNode> s=new Stack <GraphNode>();
 		List <GraphNode> NodeList=new ArrayList <GraphNode>(num);
 		for(int i=0;i<num;i++)
-			NodeList.add(Node[i]);
+			if(Node[i].preColoring==-1)
+				NodeList.add(Node[i]);
 		
 		while(!NodeList.isEmpty()) {
 			Collections.sort(NodeList,new Comparator<GraphNode>() {
@@ -118,6 +129,7 @@ class GraphNode {
 	public int num;
 	public int degree=0;
 	public int color=0; //-1 for spill
+	public int preColoring=-1;
 	public List <GraphNode> EdgeTo=new LinkedList <GraphNode>();
 	GraphNode(int num_){num=num_;}
 	public boolean addEdge(GraphNode n) {
