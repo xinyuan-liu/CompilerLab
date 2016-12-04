@@ -154,19 +154,25 @@ public class ControlFlowGraph {
 	public List<VarRef>Args=new ArrayList<VarRef>();
 	
 	public void build(StmtList sl,int n) {
-		final BasicBlock b=new BasicBlock();
-		blocks.add(b);
+
+		BasicBlock firstBlock=new BasicBlock();
+		blocks.add(firstBlock);
 		for(int i=0;i<n;i++){
 			VarRef v=new VarRef(Access.Def,i);
-			b.VarRefList.add(v);
+			firstBlock.VarRefList.add(v);
 			Args.add(v);
 		}
 		
 		if(n>ISA.Config.ArgReg.length)
 			n=ISA.Config.ArgReg.length;
 		for(int i=0;i<n;i++)
-			b.VarRefList.add(new VarRef(Access.Def,i+10000,ISA.Config.ArgReg[i]));
+			firstBlock.VarRefList.add(new VarRef(Access.Def,i+10000,ISA.Config.ArgReg[i]));
 
+		BasicBlock newblock=new BasicBlock();
+		blocks.add(newblock);
+		firstBlock.setnext(newblock);
+		final BasicBlock b=newblock;
+		
 	
 		sl.accept(new DepthFirstVisitor(){
 			BasicBlock block=b;
