@@ -11,8 +11,8 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 	String output,SLoutput;
 	String reg,SimpleExp,Exp;
 	GraphNode [] Nodes;
-	public static String[] RegName={"s0","s1","s2","s3","s4","s5","s6","s7","t0","t1","t2","t3","t4","t5","t6","t7","t8","t9","a0","a1","a2","a3","v0"};
-	public static int [] RegToSave;
+	
+	public Set<Integer> RegToSave;
 	int MaxCallerSaveCnt;
 	
 	
@@ -65,23 +65,22 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 			}
 		});
 		b=0;
-		if(a>=ControlFlowGraph.ArgReg.length) {
-			b+=a-ControlFlowGraph.ArgReg.length;
+		if(a>=ISA.Config.ArgReg.length) {
+			b+=a-ISA.Config.ArgReg.length;
 		}
 		
 		
 		
 		if(SaveFlag) {
-			RegToSave=new int[8];//TODO RISCV
+			
+			RegToSave=new HashSet<Integer>();//TODO RISCV
 			for(int i=0;i<Nodes.length;i++) {
-				if(Nodes[i].color>=0&&Nodes[i].color<8)
-					RegToSave[Nodes[i].color]=1;
+				if(ISA.Config.isCalleeSave(Nodes[i].color))
+					RegToSave.add(Nodes[i].color);
 			}
-			for(int i=0;i<RegToSave.length;i++) {
-				if(RegToSave[i]==1) {
-					RegSaveMap.put(i, b);
-					b++;
-				}
+			for(Integer i:RegToSave) {
+				RegSaveMap.put(i, b);
+				b++;
 			}
 		}
 		
@@ -105,7 +104,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		InterferenceGraph g=new InterferenceGraph();
 		g.build(cfg);
-		g.color(22);//TODO
+		g.color(ISA.Config.GPRegNum);//TODO
 		Nodes=g.Node;
 		
 		SetRunTime(0,n.f1,false);
@@ -134,7 +133,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		InterferenceGraph g=new InterferenceGraph();
 		g.build(cfg);
-		g.color(22);//TODO
+		g.color(ISA.Config.GPRegNum);//TODO
 		Nodes=g.Node;
 		
 		SetRunTime(Integer.parseInt(n.f2.toString()),n.f4.f1,true);
@@ -143,21 +142,21 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		Iterator<Integer>it=s.iterator();
 		while(it.hasNext()) {
 			int index=it.next();
-			SLoutput+="ASTORE SPILLEDARG "+RegSaveMap.get(index)+" "+RegName[index]+"\n";
+			SLoutput+="ASTORE SPILLEDARG "+RegSaveMap.get(index)+" "+ISA.Config.RegName[index]+"\n";
 		}
 		int ind=0;
 		for(VarRef v :cfg.Args) {
 			int color=getColor(v.SAnum);
 			if(color!=-1) {
-				if(ind<ControlFlowGraph.ArgReg.length)
-					SLoutput+="MOVE "+RegName[color]+" "+RegName[ControlFlowGraph.ArgReg[ind]]+"\n";
-				else SLoutput+="ALOAD "+RegName[color]+" SPILLEDARG "+(ind-ControlFlowGraph.ArgReg.length)+"\n";
+				if(ind<ISA.Config.ArgReg.length)
+					SLoutput+="MOVE "+ISA.Config.RegName[color]+" "+ISA.Config.RegName[ISA.Config.ArgReg[ind]]+"\n";
+				else SLoutput+="ALOAD "+ISA.Config.RegName[color]+" SPILLEDARG "+(ind-ISA.Config.ArgReg.length)+"\n";
 			} else {
-				if(ind<ControlFlowGraph.ArgReg.length)
-					SLoutput+="ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" "+RegName[ControlFlowGraph.ArgReg[ind]]+"\n";
+				if(ind<ISA.Config.ArgReg.length)
+					SLoutput+="ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" "+ISA.Config.RegName[ISA.Config.ArgReg[ind]]+"\n";
 				else
-					SLoutput+="ALOAD v0 SPILLEDARG "+(ind-ControlFlowGraph.ArgReg.length)+"\n"
-							+ "ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" v0\n";//TODO
+					SLoutput+="ALOAD "+ISA.Config.MemAccReg[0]+" SPILLEDARG "+(ind-ISA.Config.ArgReg.length)+"\n"
+							+ "ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" "+ISA.Config.MemAccReg[0]+"\n";//TODO
 			}
 			
 			ind++;
@@ -169,7 +168,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		it=s.iterator();
 		while(it.hasNext()) {
 			int index=it.next();
-			SLoutput+="ALOAD "+RegName[index]+" SPILLEDARG "+RegSaveMap.get(index)+"\n";
+			SLoutput+="ALOAD "+ISA.Config.RegName[index]+" SPILLEDARG "+RegSaveMap.get(index)+"\n";
 		}
 		b+=MaxCallerSaveCnt;
 		output+=n.f0.toString()+" ["+a+"] ["+b+"] ["+c+"]\n"+SLoutput+"END\n\n";
@@ -211,10 +210,10 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		int color=getColor(SSAnum);
 		String Reg;
 		if(color==-1) {
-			Reg="v0";//TODO
+			Reg=ISA.Config.MemAccReg[0];//TODO
 			
 		} else {
-			Reg=RegName[color];
+			Reg=ISA.Config.RegName[color];
 		}
 		
 		SLoutput+="HLOAD "+Reg+" "+reg+" "+n.f3.toString()+"\n";
@@ -229,10 +228,10 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		int color=getColor(SSAnum);
 		String Reg;
 		if(color==-1) {
-			Reg="v0";//TODO
+			Reg=ISA.Config.MemAccReg[0];//TODO
 			
 		} else {
-			Reg=RegName[color];
+			Reg=ISA.Config.RegName[color];
 		}
 		n.f2.accept(this,0);
 		SLoutput+="MOVE "+Reg+" "+Exp+"\n";
@@ -252,17 +251,18 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		for(Node node:n.f3.nodes) {
 			Temp t=(Temp) node;
 			t.accept(this,0);
-			if(index<ControlFlowGraph.ArgReg.length) // TODO ARG PASS
+			if(index<ISA.Config.ArgReg.length) // TODO ARG PASS
 				SLoutput+="MOVE a"+index+" "+reg+"\n";
 			else
-				SLoutput+="PASSARG "+(index-3)+" "+reg+"\n";
+				SLoutput+="PASSARG "+(index-ISA.Config.ArgReg.length+1)+" "+reg+"\n";
 			index++;
+			
 		}
 		n.f1.accept(this,0);
 		int CallerSaveCnt=0;
 		for(Integer act:n.Active) {
 			int color=Nodes[act].color;
-			if(color>=8&&color<18) {
+			if(ISA.Config.isCallerSave(color)) {
 				CallerSaveMap.put(color, b+CallerSaveCnt);
 				CallerSaveCnt++;
 			}
@@ -274,16 +274,16 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		Iterator<Integer>it=s.iterator();
 		while(it.hasNext()) {
 			int SSA=it.next();
-			SLoutput+="ASTORE SPILLEDARG "+CallerSaveMap.get(SSA)+" "+RegName[SSA]+"\n";
+			SLoutput+="ASTORE SPILLEDARG "+CallerSaveMap.get(SSA)+" "+ISA.Config.RegName[SSA]+"\n";
 		}
 		
 		SLoutput+="CALL "+SimpleExp+"\n";
 		
 		while(it.hasNext()) {
 			int SSA=it.next();
-			SLoutput+="ALOAD "+RegName[SSA]+" SPILLEDARG "+CallerSaveMap.get(SSA)+"\n";
+			SLoutput+="ALOAD "+ISA.Config.RegName[SSA]+" SPILLEDARG "+CallerSaveMap.get(SSA)+"\n";
 		}
-		Exp="v0";//TODO
+		Exp=ISA.Config.MemAccReg[0];//TODO
 	}
 	
 	public void visit(HAllocate n,Integer i) {
@@ -321,10 +321,10 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		int SSAnum=n.ref.SAnum;
 		int color=getColor(SSAnum);
 		if(color==-1) {
-			reg="v"+i;//TODO
+			reg=ISA.Config.MemAccReg[i];//TODO
 			SLoutput+="ALOAD "+reg+" SPILLEDARG "+getSpilledArgIndex(n.ref)+"\n";
 		} else {
-			reg=RegName[color];
+			reg=ISA.Config.RegName[color];
 		}
 	}
 	

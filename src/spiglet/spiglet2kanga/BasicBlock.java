@@ -47,10 +47,10 @@ public class BasicBlock {
 				public void visit(Call n) {
 					super.visit(n);
 					int l=n.f3.size();
-					if(l>ControlFlowGraph.ArgReg.length)
-						l=ControlFlowGraph.ArgReg.length;
+					if(l>ISA.Config.ArgReg.length)
+						l=ISA.Config.ArgReg.length;
 					for(int i=0;i<l;i++)
-						VarRefList.add(new VarRef(Access.Def,10000+i,ControlFlowGraph.ArgReg[i]));
+						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));
 					VarRefList.add(new CallRef(n));
 					
 				}

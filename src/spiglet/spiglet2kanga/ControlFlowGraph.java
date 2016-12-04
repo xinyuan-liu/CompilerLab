@@ -10,7 +10,7 @@ public class ControlFlowGraph {
 	List<DUChain>DUChains=new ArrayList<DUChain>();
 	public int DUChainNum;
 	
-	public static int [] ArgReg={18,19,20,21};//TODO
+	
 	
 	public void SSA() {
 		for(BasicBlock block: blocks) {
@@ -162,10 +162,10 @@ public class ControlFlowGraph {
 			Args.add(v);
 		}
 		
-		if(n>ControlFlowGraph.ArgReg.length)
-			n=ControlFlowGraph.ArgReg.length;
+		if(n>ISA.Config.ArgReg.length)
+			n=ISA.Config.ArgReg.length;
 		for(int i=0;i<n;i++)
-			b.VarRefList.add(new VarRef(Access.Def,i+10000,ArgReg[i]));
+			b.VarRefList.add(new VarRef(Access.Def,i+10000,ISA.Config.ArgReg[i]));
 
 	
 		sl.accept(new DepthFirstVisitor(){
