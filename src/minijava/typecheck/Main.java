@@ -87,7 +87,7 @@ public class Main {
 		createSymbolTable(root);
 		//检查循环继承
 		checkNulInh();
-		
+		//checkInit(root);
 		//检查未定义Id
 		checkUnDefId(root);
 		//检查类型匹配
@@ -405,8 +405,8 @@ public class Main {
 					varitem var=scope.findVar(n.getIdentifier());
 					if(var==null)
 					{
-						if((scope.findArray(n.getIdentifier())!=null)&&n.f2.accept(exprtypevisitor,scope).equals("ArrayType"))
-							;
+						if(((var=scope.findArray(n.getIdentifier()))!=null)&&n.f2.accept(exprtypevisitor,scope).equals("ArrayType"))
+							var.isinit=true;
 						else VarNotDef(n.getIdentifier());
 					}
 					else var.isinit=true;
@@ -415,7 +415,7 @@ public class Main {
 				}
 				public void visit (ArrayAssignmentStatement n,item scope)
 				{
-					if(scope.findArray(n.getIdentifier())!=null)
+					if(scope.findArray(n.getIdentifier())==null)
 					{
 						ArrayNotDef(n.getIdentifier());
 					}
@@ -631,8 +631,12 @@ public class Main {
 				public void visit (AssignmentStatement n,item scope)
 				{
 					varitem var=scope.findVar(n.getIdentifier());
-					if(var==null)
+					//System.out.println(n.getIdentifier().toString());
+					if(var==null) {
 						var=scope.findArray(n.getIdentifier());
+						//System.out.println(n.getIdentifier().toString());
+					}
+						
 					if(var!=null)
 					{
 						var.isinit=true;

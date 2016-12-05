@@ -65,11 +65,13 @@ public class BasicBlock {
 					
 				}
 				public void visit(PrintStmt n) {
+					super.visit(n);
 					for(int i=0;i<ISA.Config.ArgReg.length;i++) {
 						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));//Unused a-reg Def
 					}
 				}
 				public void visit(HAllocate n) {
+					super.visit(n);
 					for(int i=0;i<ISA.Config.ArgReg.length;i++) {
 						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));//Unused a-reg Def
 					}

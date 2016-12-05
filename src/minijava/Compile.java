@@ -34,6 +34,7 @@ public class Compile {
 		String SpigletCode=piglet.piglet2spiglet.Translator.output;
 		
 		
+		
 		reader=new StringReader(SpigletCode);
 		spiglet.syntaxtree.Node root1 = new SpigletParser(reader).Goal();
 		spiglet.spiglet2kanga.Translator t=new spiglet.spiglet2kanga.Translator();

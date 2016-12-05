@@ -77,6 +77,17 @@ public class Translator extends GJVoidDepthFirst<item>{
 			((mthditem)scope).freetmp++;
 			
 		}
+		
+		int tmp0=((mthditem)scope).freetmp;
+		piglet+="HLOAD TEMP "+tmp0+" MINUS "+base+" 4 0\n";
+		
+		piglet+="CJUMP LT LT ";
+		n.f2.accept(this,scope);
+		piglet+="TEMP "+tmp0+" 1 ";
+		int label_=freelabel;
+		freelabel++;
+		piglet+="L"+label_+" ERROR\nL"+label_+" \n";
+		
 		piglet+="HSTORE PLUS "+base+" TIMES ";
 		n.f2.accept(this,scope);
 		piglet+="4 0 ";
@@ -121,9 +132,24 @@ public class Translator extends GJVoidDepthFirst<item>{
 	
 	public void visit (ArrayLookup n,item scope)
 	{
+		piglet+="\nBEGIN\n";
+		
+		int tmp0=((mthditem)scope).freetmp;
+		piglet+="HLOAD TEMP "+tmp0+" MINUS ";
+		((mthditem)scope).freetmp++;
+		n.f0.accept(this,scope);
+		piglet+="4 0\n";
+		
+		piglet+="CJUMP LT LT ";
+		n.f2.accept(this,scope);
+		piglet+="TEMP "+tmp0+" 1 ";
+		int label_=freelabel;
+		freelabel++;
+		piglet+="L"+label_+" ERROR\nL"+label_+" \n";
+		
 		
 		int tmpn=((mthditem)scope).freetmp;
-		piglet+="\nBEGIN HLOAD TEMP "+tmpn;
+		piglet+="\nHLOAD TEMP "+tmpn;
 		((mthditem)scope).freetmp++;
 		piglet+=" PLUS\n";
 		n.f0.accept(this,scope);
