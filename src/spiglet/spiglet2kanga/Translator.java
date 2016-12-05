@@ -119,7 +119,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		//ADD RETUEN Statement
 		Temp RetTemp=new Temp(new IntegerLiteral(new NodeToken("9999")));
-		RetTemp.ref=new VarRef(Access.Def,9999,22);
+		RetTemp.ref=new VarRef(Access.Def,9999,ISA.Config.RetValReg);
 		MoveStmt Return=new MoveStmt(RetTemp,new Exp(new NodeChoice(n.f4.f3)));
 		NodeSequence ns=new NodeSequence(new NodeOptional());
 		ns.addNode(new Stmt(new NodeChoice(Return)));
@@ -283,7 +283,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 			int SSA=it.next();
 			SLoutput+="ALOAD "+ISA.Config.RegName[SSA]+" SPILLEDARG "+CallerSaveMap.get(SSA)+"\n";
 		}
-		Exp=ISA.Config.MemAccReg[0];//TODO
+		Exp=ISA.Config.RegName[ISA.Config.RetValReg];//TODO
 	}
 	
 	public void visit(HAllocate n,Integer i) {

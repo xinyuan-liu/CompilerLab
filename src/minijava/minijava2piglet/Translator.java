@@ -77,7 +77,7 @@ public class Translator extends GJVoidDepthFirst<item>{
 			((mthditem)scope).freetmp++;
 			
 		}
-		piglet+="HSTORE PLUS "+base+" TIMES ";  //TODO
+		piglet+="HSTORE PLUS "+base+" TIMES ";
 		n.f2.accept(this,scope);
 		piglet+="4 0 ";
 		n.f5.accept(this,scope);
@@ -129,7 +129,7 @@ public class Translator extends GJVoidDepthFirst<item>{
 		n.f0.accept(this,scope);
 		piglet+="\n TIMES ";
 		n.f2.accept(this,scope);
-		piglet+="4 0 RETURN TEMP "+tmpn+" END\n"; //TODO
+		piglet+="4 0 RETURN TEMP "+tmpn+" END\n";
 	}
 	
 	public void visit (ArrayLength n,item scope)
@@ -196,7 +196,7 @@ public class Translator extends GJVoidDepthFirst<item>{
 		((mthditem)scope).freetmp++;
 		piglet+="\nBEGIN MOVE TEMP "+tmp2+" ";
 		n.f3.accept(this,scope);
-		piglet+="\nMOVE TEMP "+tmp1+" HALLOCATE TIMES PLUS TEMP "+tmp2+" 1 4 ";//TODO
+		piglet+="\nMOVE TEMP "+tmp1+" HALLOCATE TIMES PLUS TEMP "+tmp2+" 1 4 ";
 		piglet+="\nHSTORE TEMP "+tmp1+" 0 TEMP "+tmp2+"\nRETURN PLUS 4 TEMP "+tmp1+" END\n";
 	}
 	
