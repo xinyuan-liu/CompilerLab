@@ -20,6 +20,8 @@ public class Translator extends DepthFirstVisitor {
 				+ "\taddi\tsp,sp,"+SlotNum*4+"\n"
 				+ "\tjr\tra\n\n";
 		n.f12.accept(this);	
+		
+		
 	}
 	
 	public void visit(Procedure n) {
