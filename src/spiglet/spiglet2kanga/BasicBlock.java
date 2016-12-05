@@ -45,15 +45,34 @@ public class BasicBlock {
 					l.add(n.f1.ref);
 				}
 				public void visit(Call n) {
-					super.visit(n);
-					int l=n.f3.size();
-					if(l>ISA.Config.ArgReg.length)
-						l=ISA.Config.ArgReg.length;
-					for(int i=0;i<l;i++)
-						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));
+					int i=0;
+					for(Node temp:n.f3.nodes){
+						temp.accept(this);//Argument-Temp Use
+						if(i<ISA.Config.ArgReg.length)
+							VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));//Used a-reg Def
+						i++;
+						
+					}
+					
+					n.f1.accept(this);//Target Reg Use
+					
+					while(i<ISA.Config.ArgReg.length) {
+						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));//Unused a-reg Def
+						i++;
+					}
+						
 					VarRefList.add(new CallRef(n));
 					
 				}
+				public void visit(PrintStmt n) {
+					for(int i=0;i<ISA.Config.ArgReg.length;i++) {
+						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));//Unused a-reg Def
+					}
+				}
+				public void visit(HAllocate n) {
+					
+				}
+				
 			});
 		}
 		

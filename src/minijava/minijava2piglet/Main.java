@@ -25,11 +25,3 @@ public class Main extends minijava.typecheck.Main{
 	}
 
 }
-
-class A {
-	public int a;
-}
-
-class B extends A{
-	public int a;
-}

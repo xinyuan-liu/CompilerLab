@@ -1,3 +1,23 @@
+	.text
+	.global	main
+main:
+	addi	sp,sp,-4
+	sw	ra,0(sp)
+	li	s10,1
+	li      t0,0
+        li      t1,1
+        li      t2,2
+        li      t3,3
+        li      t4,4
+        li      t5,5
+        li      t6,6
+        jal	_print
+        li      s10,4
+        jal     _hallocate
+	lw	ra,0(sp)
+	addi	sp,sp,4
+	jr	ra
+
 	.section	.rodata
 	.align	3
 .LC0:
@@ -7,11 +27,10 @@
 	.globl	_print
 	.type	_print, @function
 _print:
-	add	sp,sp,-88
-	sd	t0,80(sp)
+	add	sp,sp,-80
 	sd	ra,72(sp)
 	sd	s0,64(sp)
-	add	s0,sp,88
+	add	s0,sp,80
 	sw	s10,-68(s0)
 	lw	a5,-68(s0)
 	bnez	a5,.L4
@@ -81,10 +100,9 @@ _print:
 	call	puts
 .L11:
 	nop
-	ld	t0,80(sp)
 	ld	ra,72(sp)
 	ld	s0,64(sp)
-	add	sp,sp,88
+	add	sp,sp,80
 	jr	ra
 	.size	_print, .-_print
 	.align	2
@@ -104,3 +122,4 @@ _hallocate:
 	add	sp,sp,32
 	jr	ra
 	.size	_hallocate, .-_hallocate
+

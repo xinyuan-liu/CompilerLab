@@ -8,7 +8,8 @@ import spiglet.visitor.*;
 public class Translator extends GJVoidDepthFirst<Integer> {
 	int a,b,c;
 	Map<String,String>LabelMap=new HashMap<String,String>();
-	String output,SLoutput;
+	public String output;
+	String SLoutput;
 	String reg,SimpleExp,Exp;
 	GraphNode [] Nodes;
 	
@@ -47,7 +48,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		return Nodes[SSAnum].color;
 	}
 	
-	public void SetRunTime(int Argc,StmtList sl,boolean SaveFlag) {
+	public void SetRunTime(int Argc,StmtList sl) {
 		SpilledArgMap=new HashMap<Integer,Integer>();
 		RegSaveMap=new HashMap<Integer,Integer>();
 		a=Argc;
@@ -71,7 +72,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		
 		
-		if(SaveFlag) {
+		
 			
 			RegToSave=new HashSet<Integer>();//TODO RISCV
 			for(int i=0;i<Nodes.length;i++) {
@@ -82,7 +83,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 				RegSaveMap.put(i, b);
 				b++;
 			}
-		}
+		
 		
 		for(int i=0;i<Nodes.length;i++) {
 			if(Nodes[i].color==-1)
@@ -107,9 +108,20 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		g.color(ISA.Config.GPRegNum);//TODO
 		Nodes=g.Node;
 		
-		SetRunTime(0,n.f1,false);
+		SetRunTime(0,n.f1);
+		Set<Integer>s=RegSaveMap.keySet();
+		Iterator<Integer>it=s.iterator();
+		while(it.hasNext()) {
+			int index=it.next();
+			SLoutput+="ASTORE SPILLEDARG "+RegSaveMap.get(index)+" "+ISA.Config.RegName[index]+"\n";
+		}
 		
 		n.f1.accept(this,0);
+		it=s.iterator();
+		while(it.hasNext()) {
+			int index=it.next();
+			SLoutput+="ALOAD "+ISA.Config.RegName[index]+" SPILLEDARG "+RegSaveMap.get(index)+"\n";
+		}
 		output="MAIN ["+a+"] ["+b+"] ["+c+"]\n"+SLoutput+"END\n\n";
 		n.f3.accept(this,0);
 	}
@@ -136,7 +148,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		g.color(ISA.Config.GPRegNum);//TODO
 		Nodes=g.Node;
 		
-		SetRunTime(Integer.parseInt(n.f2.toString()),n.f4.f1,true);
+		SetRunTime(Integer.parseInt(n.f2.toString()),n.f4.f1);
 		
 		Set<Integer>s=RegSaveMap.keySet();
 		Iterator<Integer>it=s.iterator();

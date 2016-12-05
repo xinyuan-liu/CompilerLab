@@ -51,6 +51,7 @@ public class Main {
 	static boolean checkerror=true;
 	static String source;
 	static String [] sourcearray;
+	public static Node root;
 	int a;
 	
 	public static String readInputToString() throws IOException {
@@ -71,14 +72,17 @@ public class Main {
         return  fileData.toString();
     }
 	
-	public static void main(String[] args) throws ParseException, IOException {
-		
-		boolean ForHomeworkChecking=false;//若为false，打印出所有错误信息
-		
+	public static void main(String[] args) throws Exception {
 		source=readInputToString();
+		run(source);
+	}
+	
+	public static void run(String source_) throws Exception {
+		boolean ForHomeworkChecking=false;//若为false，打印出所有错误信息
+		source=source_;
 		Reader reader=new StringReader(source);
 		sourcearray=source.split("\n");//先将输入存入一个字符串
-		Node root = new MiniJavaParser(reader).Goal();
+		root = new MiniJavaParser(reader).Goal();
 		//将所有的类放入符号表，检查重复定义
 		createSymbolTable(root);
 		//检查循环继承
@@ -103,9 +107,12 @@ public class Main {
 		});
 		
 		//打印错误信息
-		if(!ForHomeworkChecking)
+		if(!ForHomeworkChecking) {
 			for(error e:ErrorList)
 				e.print();
+			if(!ErrorList.isEmpty())
+				throw new TypeErrorException("Type error");
+		}
 		else {
 			if(ErrorList.isEmpty())
 				System.out.println("Program type checked successfully");
