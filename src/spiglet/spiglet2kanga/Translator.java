@@ -291,6 +291,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		SLoutput+="CALL "+SimpleExp+"\n";
 		
+		it=s.iterator();
 		while(it.hasNext()) {
 			int SSA=it.next();
 			SLoutput+="ALOAD "+ISA.Config.RegName[SSA]+" SPILLEDARG "+CallerSaveMap.get(SSA)+"\n";

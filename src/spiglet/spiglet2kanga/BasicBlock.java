@@ -70,7 +70,9 @@ public class BasicBlock {
 					}
 				}
 				public void visit(HAllocate n) {
-					
+					for(int i=0;i<ISA.Config.ArgReg.length;i++) {
+						VarRefList.add(new VarRef(Access.Def,10000+i,ISA.Config.ArgReg[i]));//Unused a-reg Def
+					}
 				}
 				
 			});

@@ -7,10 +7,11 @@
 	.globl	_print
 	.type	_print, @function
 _print:
-	add	sp,sp,-80
+	add	sp,sp,-88
+	sd	t0,80(sp)
 	sd	ra,72(sp)
 	sd	s0,64(sp)
-	add	s0,sp,80
+	add	s0,sp,88
 	sw	s10,-68(s0)
 	lw	a5,-68(s0)
 	bnez	a5,.L4
@@ -80,9 +81,10 @@ _print:
 	call	puts
 .L11:
 	nop
+	ld	t0,80(sp)
 	ld	ra,72(sp)
 	ld	s0,64(sp)
-	add	sp,sp,80
+	add	sp,sp,88
 	jr	ra
 	.size	_print, .-_print
 	.align	2
