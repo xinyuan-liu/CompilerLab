@@ -74,7 +74,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		
 			
-			RegToSave=new HashSet<Integer>();//TODO RISCV
+			RegToSave=new HashSet<Integer>();
 			for(int i=0;i<Nodes.length;i++) {
 				if(ISA.Config.isCalleeSave(Nodes[i].color))
 					RegToSave.add(Nodes[i].color);
@@ -105,7 +105,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		InterferenceGraph g=new InterferenceGraph();
 		g.build(cfg);
-		g.color(ISA.Config.GPRegNum);//TODO
+		g.color(ISA.Config.GPRegNum);
 		Nodes=g.Node;
 		
 		SetRunTime(0,n.f1);
@@ -145,7 +145,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		
 		InterferenceGraph g=new InterferenceGraph();
 		g.build(cfg);
-		g.color(ISA.Config.GPRegNum);//TODO
+		g.color(ISA.Config.GPRegNum);
 		Nodes=g.Node;
 		
 		SetRunTime(Integer.parseInt(n.f2.toString()),n.f4.f1);
@@ -168,7 +168,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 					SLoutput+="ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" "+ISA.Config.RegName[ISA.Config.ArgReg[ind]]+"\n";
 				else
 					SLoutput+="ALOAD "+ISA.Config.MemAccReg[0]+" SPILLEDARG "+(ind-ISA.Config.ArgReg.length)+"\n"
-							+ "ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" "+ISA.Config.MemAccReg[0]+"\n";//TODO
+							+ "ASTORE SPILLEDARG "+getSpilledArgIndex(v)+" "+ISA.Config.MemAccReg[0]+"\n";
 			}
 			
 			ind++;
@@ -222,7 +222,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		int color=getColor(SSAnum);
 		String Reg;
 		if(color==-1) {
-			Reg=ISA.Config.MemAccReg[0];//TODO
+			Reg=ISA.Config.MemAccReg[0];
 			
 		} else {
 			Reg=ISA.Config.RegName[color];
@@ -240,7 +240,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		int color=getColor(SSAnum);
 		String Reg;
 		if(color==-1) {
-			Reg=ISA.Config.MemAccReg[0];//TODO
+			Reg=ISA.Config.MemAccReg[0];
 			
 		} else {
 			Reg=ISA.Config.RegName[color];
@@ -263,7 +263,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		for(Node node:n.f3.nodes) {
 			Temp t=(Temp) node;
 			t.accept(this,0);
-			if(index<ISA.Config.ArgReg.length) // TODO ARG PASS
+			if(index<ISA.Config.ArgReg.length)
 				SLoutput+="MOVE a"+index+" "+reg+"\n";
 			else
 				SLoutput+="PASSARG "+(index-ISA.Config.ArgReg.length+1)+" "+reg+"\n";
@@ -296,7 +296,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 			int SSA=it.next();
 			SLoutput+="ALOAD "+ISA.Config.RegName[SSA]+" SPILLEDARG "+CallerSaveMap.get(SSA)+"\n";
 		}
-		Exp=ISA.Config.RegName[ISA.Config.RetValReg];//TODO
+		Exp=ISA.Config.RegName[ISA.Config.RetValReg];
 	}
 	
 	public void visit(HAllocate n,Integer i) {
@@ -334,7 +334,7 @@ public class Translator extends GJVoidDepthFirst<Integer> {
 		int SSAnum=n.ref.SAnum;
 		int color=getColor(SSAnum);
 		if(color==-1) {
-			reg=ISA.Config.MemAccReg[i];//TODO
+			reg=ISA.Config.MemAccReg[i];
 			SLoutput+="ALOAD "+reg+" SPILLEDARG "+getSpilledArgIndex(n.ref)+"\n";
 		} else {
 			reg=ISA.Config.RegName[color];
