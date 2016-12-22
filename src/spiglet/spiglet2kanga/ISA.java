@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ISA {
 	
-	static public ISAConfig Config=new RISCV();
+	static public ISAConfig Config=new MIPS();
 }
 
 class MIPS extends ISAConfig {
