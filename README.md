@@ -7,3 +7,5 @@ See also:
 http://compilers.cs.ucla.edu/cs132/project/
 
 https://github.com/xinyuan-liu/Kanga4RISCV
+
+https://github.com/xinyuan-liu/RISCV-Simulator
